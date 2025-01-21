@@ -149,7 +149,6 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void Game_Load(System::Object^ sender, System::EventArgs^ e) {
-
 	}
 	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) {
 		System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show("Вы уверены, что хотите выйти?\nДанные будут удалены!", "Выход из игры", System::Windows::Forms::MessageBoxButtons::YesNo);

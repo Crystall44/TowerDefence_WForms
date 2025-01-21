@@ -24,7 +24,7 @@ public:
 		hp = 0;
 		dmg = 0;
 		pct = ' ';
-		place = -1;
+		place = 0;
 	}
 	~Enemy() {}
 	Enemy(System::String^ n, int c, int h, int d, char p, MoveStrategy^ strategy) :
@@ -60,17 +60,32 @@ public:
 		moveStrategy = newStrategy;
 	}
 
-	virtual void Move() {//Движение врага
+	virtual void Move(Enemy^ enemy) {//Движение врага
+		int oldPlace = place;
 		moveStrategy->Move(place, hp, maxHp);
 		if (place >= 0) {
-			if (place == 12 || place == 13 || place == 22 || place == 23 || place == 32 || place == 33 || place == 38 || place == 39 || place == 44 || place == 45) {
-				Y++;
-			}
-			else if ((place >= 14 && place <= 21) || (place >= 34 && place <= 37) || (place >= 40 && place <= 43)) {
-				X--;
-			}
-			else if (place != 53) {
-				X++;
+			if (place - oldPlace > 0) {
+				if (place - oldPlace > 1) {
+					oldPlace++;
+					if (oldPlace == 9 || oldPlace == 10 || oldPlace == 19 || oldPlace == 20 || oldPlace == 29 || oldPlace == 30 || oldPlace == 35 || oldPlace  == 36 || oldPlace == 41 || oldPlace == 42) {
+						X++;
+					}
+					else if ((oldPlace >= 11 && oldPlace <= 18) || (oldPlace >= 31 && oldPlace <= 34) || (oldPlace >= 37 && oldPlace <= 40)) {
+						Y--;
+					}
+					else if (oldPlace < 51) {
+						Y++;
+					}
+				}
+				if (place == 10 || place == 11 || place == 20 || place == 21 || place == 30 || place == 31 || place == 36 || place == 37 || place == 42 || place == 43) {
+					X++;
+				}
+				else if ((place >= 12 && place <= 19) || (place >= 32 && place <= 35) || (place >= 38 && place <= 41)) {
+					Y--;
+				}
+				else if (place < 52) {
+					Y++;
+				}
 			}
 		}
 	}
@@ -137,7 +152,7 @@ public:
 //Структура босса - дочерный класс Enemy
 public ref class BossEnemy :public Enemy {
 public:
-	BossEnemy() : Enemy("Boss", 500, 500, 50, 'B', gcnew SlowMove()) {}
+	BossEnemy() : Enemy("Boss", 50, 500, 50, 'B', gcnew SlowMove()) {}
 	~BossEnemy() {};
 
 	std::string getDescription() override {
@@ -148,7 +163,7 @@ public:
 //Класс быстрого врага
 public ref class FastEnemy : public Enemy {
 public:
-	FastEnemy() : Enemy("FastEnemy", 50, 50, 20, 'F', gcnew FastMove()) {}
+	FastEnemy() : Enemy("FastEnemy", 12, 50, 20, 'F', gcnew FastMove()) {}
 
 	~FastEnemy() {}
 

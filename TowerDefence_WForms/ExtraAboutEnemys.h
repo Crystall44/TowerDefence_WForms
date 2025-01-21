@@ -1,5 +1,4 @@
 #pragma once
-
 namespace TowerDefenceWForms {
 
 	using namespace System;
@@ -35,6 +34,13 @@ namespace TowerDefenceWForms {
 			}
 		}
 
+	protected:
+
+
+
+
+
+
 	private:
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -48,12 +54,25 @@ namespace TowerDefenceWForms {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"ExtraAboutEnemys";
-			this->Padding = System::Windows::Forms::Padding(0);
+			this->SuspendLayout();
+			// 
+			// ExtraAboutEnemys
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::ActiveBorder;
+			this->ClientSize = System::Drawing::Size(1046, 948);
+			this->Name = L"ExtraAboutEnemys";
+			this->Text = L"ExtraAboutEnemys";
+			this->Load += gcnew System::EventHandler(this, &ExtraAboutEnemys::ExtraAboutEnemys_Load);
+			this->ResumeLayout(false);
+
 		}
 #pragma endregion
-	};
+	private: System::Void ExtraAboutEnemys_Load(System::Object^ sender, System::EventArgs^ e) {
+		
+	}
+	private: System::Void By_Click(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }

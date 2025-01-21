@@ -1,5 +1,6 @@
 #pragma once
 #include"ExtraAboutEnemys.h"
+#include <vector>
 namespace TowerDefenceWForms {
 
 	using namespace System;
@@ -36,12 +37,12 @@ namespace TowerDefenceWForms {
 		}
 	private: System::Windows::Forms::DataGridView^ dataGridView1;
 	protected:
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ num;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ hp;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dmg;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ speed;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ rare;
+
+
+
+
+
+
 	private: System::Windows::Forms::Button^ ExtraEnemys;
 	private: System::Windows::Forms::Button^ Search;
 	private: System::Windows::Forms::Button^ Sort;
@@ -52,6 +53,12 @@ namespace TowerDefenceWForms {
 	private: System::Windows::Forms::Button^ Exit;
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ SortByRare;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ num;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ name;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ hp;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dmg;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ speed;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ rare;
 
 	private:
 		/// <summary>
@@ -67,12 +74,6 @@ namespace TowerDefenceWForms {
 		void InitializeComponent(void)
 		{
 			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
-			this->num = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->hp = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->dmg = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->speed = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->rare = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->ExtraEnemys = (gcnew System::Windows::Forms::Button());
 			this->Search = (gcnew System::Windows::Forms::Button());
 			this->Sort = (gcnew System::Windows::Forms::Button());
@@ -83,6 +84,12 @@ namespace TowerDefenceWForms {
 			this->Exit = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->SortByRare = (gcnew System::Windows::Forms::Button());
+			this->num = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->hp = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dmg = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->speed = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->rare = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -101,42 +108,6 @@ namespace TowerDefenceWForms {
 			this->dataGridView1->ReadOnly = true;
 			this->dataGridView1->Size = System::Drawing::Size(655, 323);
 			this->dataGridView1->TabIndex = 0;
-			// 
-			// num
-			// 
-			this->num->HeaderText = L"№";
-			this->num->Name = L"num";
-			this->num->ReadOnly = true;
-			// 
-			// name
-			// 
-			this->name->HeaderText = L"Название";
-			this->name->Name = L"name";
-			this->name->ReadOnly = true;
-			// 
-			// hp
-			// 
-			this->hp->HeaderText = L"Здоровье";
-			this->hp->Name = L"hp";
-			this->hp->ReadOnly = true;
-			// 
-			// dmg
-			// 
-			this->dmg->HeaderText = L"Урон";
-			this->dmg->Name = L"dmg";
-			this->dmg->ReadOnly = true;
-			// 
-			// speed
-			// 
-			this->speed->HeaderText = L"Скорость";
-			this->speed->Name = L"speed";
-			this->speed->ReadOnly = true;
-			// 
-			// rare
-			// 
-			this->rare->HeaderText = L"Редкость";
-			this->rare->Name = L"rare";
-			this->rare->ReadOnly = true;
 			// 
 			// ExtraEnemys
 			// 
@@ -280,6 +251,42 @@ namespace TowerDefenceWForms {
 			this->SortByRare->Visible = false;
 			this->SortByRare->Click += gcnew System::EventHandler(this, &AboutEnemys::SortByRare_Click);
 			// 
+			// num
+			// 
+			this->num->HeaderText = L"№";
+			this->num->Name = L"num";
+			this->num->ReadOnly = true;
+			// 
+			// name
+			// 
+			this->name->HeaderText = L"Имя";
+			this->name->Name = L"name";
+			this->name->ReadOnly = true;
+			// 
+			// hp
+			// 
+			this->hp->HeaderText = L"Здоровье";
+			this->hp->Name = L"hp";
+			this->hp->ReadOnly = true;
+			// 
+			// dmg
+			// 
+			this->dmg->HeaderText = L"Урон";
+			this->dmg->Name = L"dmg";
+			this->dmg->ReadOnly = true;
+			// 
+			// speed
+			// 
+			this->speed->HeaderText = L"Скорость";
+			this->speed->Name = L"speed";
+			this->speed->ReadOnly = true;
+			// 
+			// rare
+			// 
+			this->rare->HeaderText = L"Редкость";
+			this->rare->Name = L"rare";
+			this->rare->ReadOnly = true;
+			// 
 			// AboutEnemys
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -307,6 +314,90 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void AboutEnemys_Load(System::Object^ sender, System::EventArgs^ e) {
+		DataGridViewRow^ row1 = gcnew DataGridViewRow();
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[0]->Value = 1;
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[1]->Value = "Zombe";
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[2]->Value = 100;
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[3]->Value = 10;
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[4]->Value = "Обычная";
+		row1->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row1->Cells[5]->Value = 2;
+		DataGridViewRow^ row2 = gcnew DataGridViewRow();
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[0]->Value = 2;
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[1]->Value = "Skeleton";
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[2]->Value = 30;
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[3]->Value = 20;
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[4]->Value = "Обычная";
+		row2->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row2->Cells[5]->Value = 1;
+		DataGridViewRow^ row3 = gcnew DataGridViewRow();
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[0]->Value = 3;
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[1]->Value = "Angry Zombe";
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[2]->Value = 75;
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[3]->Value = 25;
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[4]->Value = "Зависит от здоровья";
+		row3->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row3->Cells[5]->Value = 3;
+		DataGridViewRow^ row4 = gcnew DataGridViewRow();
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[0]->Value = 4;
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[1]->Value = "FastEnemy";
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[2]->Value = 50;
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[3]->Value = 20;
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[4]->Value = "Быстрая";
+		row4->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row4->Cells[5]->Value = 3;
+		DataGridViewRow^ row5 = gcnew DataGridViewRow();
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[0]->Value = 5;
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[1]->Value = "Fly";
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[2]->Value = 5;
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[3]->Value = 10;
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[4]->Value = "Обычная";
+		row5->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row5->Cells[5]->Value = 1;
+		DataGridViewRow^ row6 = gcnew DataGridViewRow();
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[0]->Value = 6;
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[1]->Value = "Boss";
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[2]->Value = 500;
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[3]->Value = 50;
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[4]->Value = "Медленная";
+		row6->Cells->Add(gcnew DataGridViewTextBoxCell());
+		row6->Cells[5]->Value = 4;
+		this->dataGridView1->Rows->Add(row1);
+		this->dataGridView1->Rows->Add(row2);
+		this->dataGridView1->Rows->Add(row3);
+		this->dataGridView1->Rows->Add(row4);
+		this->dataGridView1->Rows->Add(row5);
+		this->dataGridView1->Rows->Add(row6);
 	}
 	private: System::Void ExtraEnemys_Click(System::Object^ sender, System::EventArgs^ e) {
 		ExtraAboutEnemys^ extraenemys = gcnew ExtraAboutEnemys;
@@ -314,20 +405,19 @@ namespace TowerDefenceWForms {
 		extraenemys->ShowDialog();
 		this->Show();
 	}
-private: System::Void Sort_Click(System::Object^ sender, System::EventArgs^ e) {
-	SortByDmg->Show();
-	SortByHp->Show();
-	SortByName->Show();
-	SortByRare->Show();
-	SortBySpeed->Show();
-	label1->Show();
-}
-private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->Close();
-}
+	private: System::Void Sort_Click(System::Object^ sender, System::EventArgs^ e) {
+		SortByDmg->Show();
+		SortByHp->Show();
+		SortByName->Show();
+		SortByRare->Show();
+		SortBySpeed->Show();
+		label1->Show();
+	}
+	private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Close();
+	}
 private: System::Void SortByName_Click(System::Object^ sender, System::EventArgs^ e) {
-
-
+	SortDataGridView(1, System::ComponentModel::ListSortDirection::Ascending);
 	SortByDmg->Hide();
 	SortByHp->Hide();
 	SortByName->Hide();
@@ -336,6 +426,7 @@ private: System::Void SortByName_Click(System::Object^ sender, System::EventArgs
 	label1->Hide();
 }
 private: System::Void SortByHp_Click(System::Object^ sender, System::EventArgs^ e) {
+	SortDataGridView(2, System::ComponentModel::ListSortDirection::Ascending);
 	SortByDmg->Hide();
 	SortByHp->Hide();
 	SortByName->Hide();
@@ -344,6 +435,7 @@ private: System::Void SortByHp_Click(System::Object^ sender, System::EventArgs^ 
 	label1->Hide();
 }
 private: System::Void SortByDmg_Click(System::Object^ sender, System::EventArgs^ e) {
+	SortDataGridView(3, System::ComponentModel::ListSortDirection::Ascending);
 	SortByDmg->Hide();
 	SortByHp->Hide();
 	SortByName->Hide();
@@ -352,6 +444,7 @@ private: System::Void SortByDmg_Click(System::Object^ sender, System::EventArgs^
 	label1->Hide();
 }
 private: System::Void SortBySpeed_Click(System::Object^ sender, System::EventArgs^ e) {
+	SortDataGridView(4, System::ComponentModel::ListSortDirection::Ascending);
 	SortByDmg->Hide();
 	SortByHp->Hide();
 	SortByName->Hide();
@@ -360,6 +453,7 @@ private: System::Void SortBySpeed_Click(System::Object^ sender, System::EventArg
 	label1->Hide();
 }
 private: System::Void SortByRare_Click(System::Object^ sender, System::EventArgs^ e) {
+	SortDataGridView(5, System::ComponentModel::ListSortDirection::Ascending);
 	SortByDmg->Hide();
 	SortByHp->Hide();
 	SortByName->Hide();
@@ -367,5 +461,18 @@ private: System::Void SortByRare_Click(System::Object^ sender, System::EventArgs
 	SortBySpeed->Hide();
 	label1->Hide();
 }
+private:
+	private: void SortDataGridView(int columnIndex, System::ComponentModel::ListSortDirection sortDirection)
+	{
+		// Sorting rows by 'Age' (second column)
+		if (sortDirection == System::ComponentModel::ListSortDirection::Ascending)
+		{
+			dataGridView1->Sort(dataGridView1->Columns[columnIndex], System::ComponentModel::ListSortDirection::Ascending);
+		}
+		else
+		{
+			dataGridView1->Sort(dataGridView1->Columns[columnIndex], System::ComponentModel::ListSortDirection::Descending);
+		}
+	}
 };
 }

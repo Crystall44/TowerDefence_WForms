@@ -43,7 +43,10 @@ public:
 	}
 	void repair() {//Починка(вызывается в Shop)
 		hp += 500;
-		if (hp > 3000) hp = 3000;
+	}
+	void upgrade() {
+		lvl++;
+		dmg += 20;
 	}
 };
 
@@ -70,6 +73,9 @@ public:
 	}
 	int getLvl() { //Возврат значения через указатель
 		return lvl;
+	}
+	int getRange() { //Возврат значения через указатель
+		return range;
 	}
 	bool isNear(int enemyPlace, int towerPlace) {//Проверка рядом ли с башней враг
 		switch (towerPlace) {
@@ -100,17 +106,18 @@ public:
 		}
 	}
 	void upDmg() {//Повышение урона
-		dmg += 25;
+		dmg += 10;
 		lvl++;
 	}
 	void upRange() {//Повышение дальности
 		range += 1;
 		lvl++;
 	}
-	void Build() {//Построить башню
-		range = 2;
-		dmg = 15;
-		lvl = 1;
+	void Build(int dmg1, int range1, int lvl1, bool boosted1) {//Построить башню
+		dmg = dmg1;
+		range = range1;
+		lvl = lvl1;
+		boostTower = boosted1;
 	}
 	void Del() {//Удалить башню
 		lvl = 0;

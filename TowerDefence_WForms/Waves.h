@@ -25,7 +25,8 @@ namespace TowerDefenceWForms {
 		int rows = 13;
 		int cols = 13;
 		List<Enemy^>^ enemys = gcnew List<Enemy^>();
-		List<System::Windows::Forms::PictureBox^>^ enemyVisuals = gcnew List<System::Windows::Forms::PictureBox^>();
+	private: System::Windows::Forms::Label^ mainHp;
+		   List<System::Windows::Forms::PictureBox^>^ enemyVisuals = gcnew List<System::Windows::Forms::PictureBox^>();
 	public:
 		Waves(void) {
 			InitializeComponent();  // Инициализация компонентов формы
@@ -56,13 +57,24 @@ namespace TowerDefenceWForms {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->mainHp = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
+			// 
+			// mainHp
+			// 
+			this->mainHp->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 21.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->mainHp->Location = System::Drawing::Point(-5, 650);
+			this->mainHp->Name = L"mainHp";
+			this->mainHp->Size = System::Drawing::Size(703, 79);
+			this->mainHp->TabIndex = 0;
 			// 
 			// Waves
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(976, 760);
+			this->ClientSize = System::Drawing::Size(699, 726);
+			this->Controls->Add(this->mainHp);
 			this->Name = L"Waves";
 			this->Text = L"Waves";
 			this->Load += gcnew System::EventHandler(this, &Waves::Waves_Load);
@@ -74,36 +86,38 @@ namespace TowerDefenceWForms {
 #pragma endregion
 	private: System::Void Waves_Load(System::Object^ sender, System::EventArgs^ e) {
 		DrawMap();
-		States::Instance->Wave += 1;
-		if (States::Instance->Wave % 5 == 0) States::Instance->Booster++;
-		int mon = States::Instance->EnemysMoney / 20;
-		while (States::Instance->EnemysMoney > 0) {
-			buyEnemy(States::Instance->Wave, enemys);
-		}
-		Wave();
+		Threading::Tasks::Task::Run(gcnew Action(this, &Waves::StartWaveProcessing));
 
 	}
-	private: void HandleWave() {
-		DrawMap();  // Отрисовываем карту
+	private: void StartWaveProcessing() {
+		mainHp->Text = "Здоровье главной башни = " + States::Instance->MainTower->getHp();
 		States::Instance->Wave += 1;
-		if (States::Instance->Wave % 5 == 0) States::Instance->Booster++;
-
+		if (States::Instance->Wave % 5 == 0)
+		   States::Instance->Booster++;
+		 // Распределяем деньги врагам
 		int mon = States::Instance->EnemysMoney / 20;
 		while (States::Instance->EnemysMoney > 0) {
 			buyEnemy(States::Instance->Wave, enemys);
 		}
-
-		for (int i = 0; i < mon; i++) {
+		mon++;
+		for (int i = 0; i <= mon; i++) {
 			States::Instance->EnemysMoney += 20;
 		}
-
-		Wave();  // Запускаем волну
-	}
+		// Запускаем волну врагов
+		Wave();
+		if (States::Instance->MainTower->isAlive()) {
+			System::Windows::Forms::MessageBox::Show("Волна " + States::Instance->Wave + " пройдена!", "Победа!", System::Windows::Forms::MessageBoxButtons::OK);
+		}
+		else {
+			System::Windows::Forms::MessageBox::Show("Главная башня разрушена! Вы проиграли.", "Поражение...", System::Windows::Forms::MessageBoxButtons::OK);
+			Application::Restart();
+		}
+    }
 	public:
 		void DrawMap() {
 			// Получаем карту из States
 			auto map = States::Instance->Map;
-
+			int towerNumber = 0;
 			// Создаем массив PictureBox для визуализации
 			mapVisual = gcnew cli::array<System::Windows::Forms::PictureBox^, 2>(rows, cols);
 
@@ -126,7 +140,21 @@ namespace TowerDefenceWForms {
 						mapVisual[i, j]->BackColor = System::Drawing::Color::Brown;
 						break;
 					case 3://Башня
+						if (States::Instance->Towers[towerNumber]->getLvl() > 0) {
+							// Создаем внутренний PictureBox (вложенный квадрат внутри башни)
+							System::Windows::Forms::PictureBox^ innerBox = gcnew System::Windows::Forms::PictureBox();
+							innerBox->Width = 25;  // Размер вложенного квадрата
+							innerBox->Height = 25;
+							innerBox->BackColor = System::Drawing::Color::FromArgb(105, 105, 105);
+
+							// Центрируем вложенный квадрат внутри основного
+							innerBox->Top = (mapVisual[i, j]->Height - innerBox->Height) / 2;  // Смещение сверху
+							innerBox->Left = (mapVisual[i, j]->Width - innerBox->Width) / 2;   // Смещение слева
+							 // Добавляем вложенный PictureBox в основной
+							mapVisual[i, j]->Controls->Add(innerBox);
+						}
 						mapVisual[i, j]->BackColor = System::Drawing::Color::Gray;
+						towerNumber++;
 						break;
 					case 4://Главная башня
 						mapVisual[i, j]->BackColor = System::Drawing::Color::Red;
@@ -157,10 +185,10 @@ namespace TowerDefenceWForms {
 			// Добавляем врага на форму
 			this->Controls->Add(enemyVisual);
 
+			enemyVisual->BringToFront();
+
 			// Сохраняем ссылку на PictureBox в списке для дальнейшего удаления
 			enemyVisuals->Add(enemyVisual);
-
-			enemy->setXY(0, 1);
 		}
 
 		void clearEnemys() {
@@ -168,6 +196,7 @@ namespace TowerDefenceWForms {
 				this->Controls->Remove(enemyVisuals[i]); // Удаляем врага с формы
 				enemyVisuals->RemoveAt(i);  // Удаляем из списка
 			}
+			enemyVisuals->Clear();
 		}
 
 		void updateEnemys() {
@@ -175,7 +204,7 @@ namespace TowerDefenceWForms {
 
 			for (int i = 0; i < enemys->Count; i++) {
 				Enemy^ enemy = enemys[i];
-				if(enemy->getPlace() >= 1) placeEnemy(enemy->getX(), enemy->getY(), enemy);
+				if(enemy->getPlace() >= -1) placeEnemy(enemy->getX(), enemy->getY(), enemy);
 			}
 		}
 
@@ -185,7 +214,8 @@ namespace TowerDefenceWForms {
 				if (States::Instance->EnemysMoney >= boss->getCost()) {
 					States::Instance->EnemysMoney = States::Instance->EnemysMoney - boss->getCost();
 					boss->setMoveStrategy(gcnew SlowMove());
-					boss->setXY(-1, 1);
+					boss->setXY(1, 0);
+					boss->setColor(System::Drawing::Color::Black);
 					enemys->Add(boss);
 					enemysCount++;
 					enemys[enemysCount - 1]->setPlace(-1 * enemysCount);
@@ -245,7 +275,8 @@ namespace TowerDefenceWForms {
 			}
 			if (States::Instance->EnemysMoney >= newEnemy->getCost()) {
 				States::Instance->EnemysMoney = States::Instance->EnemysMoney - newEnemy->getCost();
-				newEnemy->setXY(-1, 1);
+				newEnemy->setXY(1, 0);
+				newEnemy->setPlace(-1 * enemys->Count);
 				enemys->Add(newEnemy);
 				enemysCount++;
 				enemys[enemysCount - 1]->setPlace(-1 * enemysCount);
@@ -290,14 +321,11 @@ namespace TowerDefenceWForms {
 				}
 				for (i = 0; i < enemysCount; i++) {
 					if (enemys[i]->isAlive()) {
-						if (enemys[i]->getPlace() != 53 && enemys[i]->getPlace() >= 1) {
-							enemys[i]->Move();
+						if (enemys[i]->getPlace() != 52) {
+							enemys[i]->Move(enemys[i]);
 						}
-						else if (enemys[i]->getPlace() == 53) {
+						else if (enemys[i]->getPlace() == 52) {
 							States::Instance->MainTower->takeDmg(enemys[i]->getDmg());
-						}
-						else {
-							enemys[i]->Move();
 						}
 					}
 					else {
@@ -307,14 +335,15 @@ namespace TowerDefenceWForms {
 						i--;
 					}
 				}
-				updateEnemys();
-				Application::DoEvents();
+
+				this->Invoke(gcnew Action(this, &Waves::updateEnemys));
+				mainHp->Text = "Здоровье главной башни = " + States::Instance->MainTower->getHp();
 				Threading::Thread::Sleep(800);
 				if (enemysCount == 0) f = 0;
 				if (States::Instance->MainTower->isAlive() != true) f = 0;
 			} while (f);
 			enemysCount = 0;
-			
+			this->Close();
 		}
 	};
 }

@@ -168,6 +168,9 @@
     <EmbeddedResource Include="AboutEnemys.resx">
       <DependentUpon>AboutEnemys.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExtraAboutEnemys.resx">
+      <DependentUpon>ExtraAboutEnemys.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Game.resx">
       <DependentUpon>Game.h</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +189,10 @@
     <EmbeddedResource Include="Waves.resx">
       <DependentUpon>Waves.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\vlad.bmp" />
+    <Image Include="..\Resources\vlad.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

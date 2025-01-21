@@ -41,6 +41,7 @@ namespace TowerDefenceWForms {
 	private: System::Windows::Forms::Button^ Towers;
 	private: System::Windows::Forms::Button^ MainTower;
 	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ moneyInfo;
 
 	private:
 		/// <summary>
@@ -56,6 +57,7 @@ namespace TowerDefenceWForms {
 		void InitializeComponent(void)
 		{
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->moneyInfo = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->Exit = (gcnew System::Windows::Forms::Button());
 			this->Towers = (gcnew System::Windows::Forms::Button());
@@ -66,6 +68,7 @@ namespace TowerDefenceWForms {
 			// panel1
 			// 
 			this->panel1->BackColor = System::Drawing::SystemColors::ActiveBorder;
+			this->panel1->Controls->Add(this->moneyInfo);
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->Exit);
 			this->panel1->Controls->Add(this->Towers);
@@ -75,6 +78,15 @@ namespace TowerDefenceWForms {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(765, 608);
 			this->panel1->TabIndex = 0;
+			// 
+			// moneyInfo
+			// 
+			this->moneyInfo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->moneyInfo->Location = System::Drawing::Point(269, 96);
+			this->moneyInfo->Name = L"moneyInfo";
+			this->moneyInfo->Size = System::Drawing::Size(433, 115);
+			this->moneyInfo->TabIndex = 21;
 			// 
 			// label1
 			// 
@@ -95,7 +107,7 @@ namespace TowerDefenceWForms {
 			this->Exit->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->Exit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->Exit->Location = System::Drawing::Point(229, 370);
+			this->Exit->Location = System::Drawing::Point(232, 473);
 			this->Exit->Name = L"Exit";
 			this->Exit->Size = System::Drawing::Size(303, 88);
 			this->Exit->TabIndex = 2;
@@ -110,7 +122,7 @@ namespace TowerDefenceWForms {
 			this->Towers->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->Towers->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->Towers->Location = System::Drawing::Point(229, 251);
+			this->Towers->Location = System::Drawing::Point(232, 354);
 			this->Towers->Name = L"Towers";
 			this->Towers->Size = System::Drawing::Size(303, 90);
 			this->Towers->TabIndex = 1;
@@ -125,7 +137,7 @@ namespace TowerDefenceWForms {
 			this->MainTower->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->MainTower->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->MainTower->Location = System::Drawing::Point(229, 132);
+			this->MainTower->Location = System::Drawing::Point(232, 235);
 			this->MainTower->Name = L"MainTower";
 			this->MainTower->Size = System::Drawing::Size(303, 94);
 			this->MainTower->TabIndex = 0;
@@ -149,6 +161,7 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void Shop_Load(System::Object^ sender, System::EventArgs^ e) {
+		moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 	}
 	private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->Close();
@@ -157,12 +170,14 @@ private: System::Void MainTower_Click(System::Object^ sender, System::EventArgs^
 	ShopMainTower^ mainT = gcnew ShopMainTower;
 	this->Hide();
 	mainT->ShowDialog();
+	moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 	this->Show();
 }
 private: System::Void Towers_Click(System::Object^ sender, System::EventArgs^ e) {
 	ShopExtraTowers^ extraT = gcnew ShopExtraTowers;
 	this->Hide();
 	extraT->ShowDialog();
+	moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 	this->Show();
 }
 };
