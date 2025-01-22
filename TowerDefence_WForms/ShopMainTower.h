@@ -144,12 +144,15 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void ShopMainTower_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Загрузка магазина
 		Heal->Text = L"Восстановить здоровье(" + States::Instance->RepairCost + ")";
 		Upgrade->Text = L"Улучшить(" + States::Instance->MainUpgradeCost + ")";
 		moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster + "\nЗдоровье главной башни:" + States::Instance->MainTower->getHp();
 	}
 	private: System::Void Upgrade_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Улучшить главную башню
 		if (States::Instance->Money >= States::Instance->MainUpgradeCost && States::Instance->MainTower->getLvl() < 10) {
+			//Если хватает средств и уровень < 10
 			States::Instance->MainTower->upgrade();
 			States::Instance->Money -= States::Instance->MainUpgradeCost;
 			States::Instance->MainUpgradeCost += 20;
@@ -158,14 +161,18 @@ namespace TowerDefenceWForms {
 			Upgrade->Text = L"Улучшить(" + States::Instance->MainUpgradeCost + ")";
 		}
 		else if(States::Instance->Money < States::Instance->MainUpgradeCost) {
+			//Если не хватает средств
 			System::Windows::Forms::MessageBox::Show("У вас недостаточно средств!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 		else {
+			//Если главная башня прокачана на максимум
 			System::Windows::Forms::MessageBox::Show("Главная башня прокачана на максимум!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 	}
 	private: System::Void Heal_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Восстановить здоровье
 		if (States::Instance->Money >= States::Instance->RepairCost) {
+			//Если хватает средств - восстанавливем здоровье
 			States::Instance->MainTower->setHp(States::Instance->MainTower->getHp() + 500);
 			States::Instance->Money -= States::Instance->RepairCost;
 			States::Instance->RepairCost += 10;
@@ -174,10 +181,12 @@ namespace TowerDefenceWForms {
 			Heal->Text = L"Восстановить здоровье(" + States::Instance->RepairCost + ")";
 		}
 		else {
+			//Если не хватает средств
 			System::Windows::Forms::MessageBox::Show("У вас недостаточно средств!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 	}
 	private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Выход из формы
 		this->Close();
 	}
 };

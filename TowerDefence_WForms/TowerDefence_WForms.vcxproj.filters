@@ -45,6 +45,9 @@
     <ClCompile Include="States.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="SearchEnemy.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -86,13 +89,8 @@
     <ClInclude Include="Towers.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Resources\vlad.png">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
-    <Image Include="..\Resources\vlad.bmp">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
+    <ClInclude Include="SearchEnemy.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

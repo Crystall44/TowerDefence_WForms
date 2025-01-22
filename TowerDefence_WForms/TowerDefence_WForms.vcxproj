@@ -123,6 +123,7 @@
     <ClCompile Include="AboutEnemys.cpp" />
     <ClCompile Include="ExtraAboutEnemys.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="SearchEnemy.cpp" />
     <ClCompile Include="ShopExtraTowers.cpp" />
     <ClCompile Include="ShopMainTower.cpp" />
     <ClCompile Include="Info.cpp" />
@@ -143,6 +144,9 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MoveStrategy.h" />
+    <ClInclude Include="SearchEnemy.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ShopExtraTowers.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -174,8 +178,14 @@
     <EmbeddedResource Include="Game.resx">
       <DependentUpon>Game.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Info.resx">
+      <DependentUpon>Info.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchEnemy.resx">
+      <DependentUpon>SearchEnemy.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shop.resx">
       <DependentUpon>Shop.h</DependentUpon>
@@ -189,10 +199,6 @@
     <EmbeddedResource Include="Waves.resx">
       <DependentUpon>Waves.h</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Resources\vlad.bmp" />
-    <Image Include="..\Resources\vlad.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

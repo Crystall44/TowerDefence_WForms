@@ -161,12 +161,15 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void Shop_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Загрузка магазина - показ средств
 		moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 	}
 	private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Выход из магазина
 		this->Close();
 	}
 private: System::Void MainTower_Click(System::Object^ sender, System::EventArgs^ e) {
+	//Главная башня(другая форма)
 	ShopMainTower^ mainT = gcnew ShopMainTower;
 	this->Hide();
 	mainT->ShowDialog();
@@ -174,6 +177,7 @@ private: System::Void MainTower_Click(System::Object^ sender, System::EventArgs^
 	this->Show();
 }
 private: System::Void Towers_Click(System::Object^ sender, System::EventArgs^ e) {
+	//Вспомогательные башни(другая форма)
 	ShopExtraTowers^ extraT = gcnew ShopExtraTowers;
 	this->Hide();
 	extraT->ShowDialog();

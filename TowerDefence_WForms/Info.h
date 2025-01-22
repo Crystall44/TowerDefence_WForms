@@ -34,6 +34,9 @@ namespace TowerDefenceWForms {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::Label^ label1;
+	protected:
+	private: System::Drawing::Printing::PrintDocument^ printDocument1;
 
 	private:
 		/// <summary>
@@ -48,11 +51,33 @@ namespace TowerDefenceWForms {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"Info";
-			this->Padding = System::Windows::Forms::Padding(0);
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Info::typeid));
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->printDocument1 = (gcnew System::Drawing::Printing::PrintDocument());
+			this->SuspendLayout();
+			// 
+			// label1
+			// 
+			this->label1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label1->Location = System::Drawing::Point(0, 0);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(929, 814);
+			this->label1->TabIndex = 0;
+			this->label1->Text = resources->GetString(L"label1.Text");
+			// 
+			// Info
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::ActiveBorder;
+			this->ClientSize = System::Drawing::Size(929, 814);
+			this->Controls->Add(this->label1);
+			this->Name = L"Info";
+			this->Text = L"Info";
+			this->ResumeLayout(false);
+
 		}
 #pragma endregion
 	};

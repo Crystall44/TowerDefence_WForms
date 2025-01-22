@@ -325,6 +325,7 @@ namespace TowerDefenceWForms {
 		}
 #pragma endregion
 	private: System::Void ShopExtraTowers_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Загрузка формы
 		// Получаем карту из States
 		moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 		auto map = States::Instance->Map;
@@ -351,7 +352,7 @@ namespace TowerDefenceWForms {
 					mapVisual[i, j] = button;
 					this->Controls->Add(button);
 				}
-				else {
+				else {//Если не башня просто рисуем карту
 					auto pictureBox = gcnew System::Windows::Forms::PictureBox();
 					pictureBox->Width = 50;
 					pictureBox->Height = 50;
@@ -383,13 +384,14 @@ namespace TowerDefenceWForms {
 
 	public:
 		void OnTowerButtonClick(System::Object^ sender, System::EventArgs^ e) {
+			//Нажатие на какую-то из башен
 			auto button = safe_cast<System::Windows::Forms::Button^>(sender);
 
-			// Получаем координаты клетки из Tag
+			// Получаем координаты клетки
 			auto coords = safe_cast<System::Tuple<int, int>^>(button->Tag);
 			int row = coords->Item1;
 			int col = coords->Item2;
-			switch (row) {
+			switch (row) {//Получаем номер башни по ряду и столбцу
 			case 2:
 				if (col == 4) towerNumber = 0;
 				if (col == 7) towerNumber = 1;
@@ -415,6 +417,7 @@ namespace TowerDefenceWForms {
 				if (col == 5) towerNumber = 11;
 				break;
 			}
+			//Показ и скрытие некоторых элементов
 			By->Visible = true;
 			upgrade->Visible = true;
 			Del->Visible = true;
@@ -424,6 +427,7 @@ namespace TowerDefenceWForms {
 			SniperTower->Visible = false;
 			escape->Visible = false;
 			auto map = States::Instance->Map;
+			//Информация о выбранной башне
 			label2->Text = "Уровень = " + States::Instance->Towers[towerNumber]->getLvl() + " Урон = " + States::Instance->Towers[towerNumber]->getDamage() + " Дальность = " + States::Instance->Towers[towerNumber]->getRange();
 			label2->Visible = true;
 			upDmg->Visible = false;
@@ -435,6 +439,7 @@ namespace TowerDefenceWForms {
 		}
 
 	private: System::Void By_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Покупка башни(показ кнопок для этого)
 		label2->Visible = false;
 		label1->Text = "Выберите тип башни:";
 		usual->Visible = true;
@@ -449,6 +454,7 @@ namespace TowerDefenceWForms {
 
 	}
 	private: System::Void upgrade_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Улучшение башни(показ кнопок для этого)
 		label1->Text = "Стоимость улучшения = " + States::Instance->Towers[towerNumber]->getLvl() * 5;
 		label2->Text = "Уровень = " + States::Instance->Towers[towerNumber]->getLvl() + " Урон = " + States::Instance->Towers[towerNumber]->getDamage() + " Дальность = " + States::Instance->Towers[towerNumber]->getRange();
 		label2->Visible = true;
@@ -463,16 +469,20 @@ namespace TowerDefenceWForms {
 
 	}
 	private: System::Void Del_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Удалить башню
 		if (States::Instance->Towers[towerNumber]->getLvl() != 0) {
 			System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show("Вы уверены, что хотите удалить башню?\nСредства не будут возвращены!", "Удаление башни", System::Windows::Forms::MessageBoxButtons::YesNo);
 			if (result == System::Windows::Forms::DialogResult::Yes) {
+				//Если выбор да - удаление башни
 				States::Instance->Towers[towerNumber]->Del();
 				System::Windows::Forms::MessageBox::Show("Башня была удалена.", "Удаление башни", System::Windows::Forms::MessageBoxButtons::OK);
 			}
+			//Иначе ничего не происходит
 		}
 		else {
 			System::Windows::Forms::MessageBox::Show("Эта башня ещё не построена!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 		}
+		//Возврат к начальному виду формы
 		label1->Text = "Выберите башню(серые кнопки на карте)";
 		By->Visible = false;
 		upgrade->Visible = false;
@@ -480,20 +490,29 @@ namespace TowerDefenceWForms {
 		Boost->Visible = false;
 	}
 	private: System::Void Boost_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Училение башни
 		if (States::Instance->Booster != 0) {
-			if (!States::Instance->Towers[towerNumber]->isBoosted()) {
+			if (!States::Instance->Towers[towerNumber]->isBoosted() && States::Instance->Towers[towerNumber]->getLvl()!= 0) {
+				//Если башня не усиленна,построена и есть бустер
 				States::Instance->Towers[towerNumber]->Boost();
 				States::Instance->Booster--;
 				moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 				System::Windows::Forms::MessageBox::Show("Башня усилена успешно! Скорострельность увеличена вдвое,но урон уменьшен на 10.", "Усиление башни", System::Windows::Forms::MessageBoxButtons::OK);
 			}
-			else {
+			else if (States::Instance->Towers[towerNumber]->isBoosted()) {
+				//Если башня уже усилена
 				System::Windows::Forms::MessageBox::Show("Башня уже усилена!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
+			}
+			else {
+				//Если уже построена
+				System::Windows::Forms::MessageBox::Show("Башня ещё не построена!", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 			}
 		}
 		else {
+			//Если нет бустеров
 			System::Windows::Forms::MessageBox::Show("У вас нет бустеров! Получите их после победы над боссом.", "Ошибка", System::Windows::Forms::MessageBoxButtons::OK);
 		}
+		//Возврат к начальному виду формы
 		label1->Text = "Выберите башню(серые кнопки на карте)";
 		By->Visible = false;
 		upgrade->Visible = false;
@@ -501,20 +520,25 @@ namespace TowerDefenceWForms {
 		Boost->Visible = false;
 	}
 	private: System::Void usual_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Купить обычную башню
 		if ((States::Instance->Money >= 10) && (States::Instance->Towers[towerNumber]->getLvl() == 0)) {
+			//Если хватает денег и башня не построена - её покупка
 			States::Instance->Money -= 10;
-			States::Instance->Towers[towerNumber]->Build(15,2,1,false);
+			States::Instance->Towers[towerNumber]->Build(15,2,1,false); //начальные значения
 			System::Windows::Forms::MessageBox::Show("Башня построена успешно!", "Покупка башни", System::Windows::Forms::MessageBoxButtons::OK);
 			moneyInfo->Text = L"Средства:" + States::Instance->Money + "\nБустеров:" + States::Instance->Booster;
 		}
 		else if(States::Instance->Money < 10) {
+			//Если не хватает средств
 			System::Windows::Forms::MessageBox::Show("У Вас недостаточно для этого средств!", "Недостаточно средств!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 		else {
+			//Если уже построена
 			System::Windows::Forms::MessageBox::Show("Эта башня уже построена!", "Ошибка!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 	}
 	private: System::Void rapidFire_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Покупка скорострельной башни
 		if ((States::Instance->Money >= 25) && (States::Instance->Towers[towerNumber]->getLvl() == 0)) {
 			States::Instance->Money -= 25;
 			States::Instance->Towers[towerNumber]->Build(10,2,1,true);
@@ -529,6 +553,7 @@ namespace TowerDefenceWForms {
 		}
 	}
 	private: System::Void SniperTower_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Покупка снайперской башни
 		if ((States::Instance->Money >= 25) && (States::Instance->Towers[towerNumber]->getLvl() == 0)) {
 			States::Instance->Money -= 25;
 			States::Instance->Towers[towerNumber]->Build(20, 5, 1, true);
@@ -543,6 +568,7 @@ namespace TowerDefenceWForms {
 		}
 	}
 	private: System::Void escape_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Назад - возврат к начальному виду формы
 		label1->Text = "Выберите башню(серые кнопки на карте)";
 		usual->Visible = false;
 		rapidFire->Visible = false;
@@ -551,7 +577,9 @@ namespace TowerDefenceWForms {
 		Exit->Visible = true;
 	}
 	private: System::Void upDmg_Click(System::Object^ sender, System::EventArgs^ e) {
-		if ((States::Instance->Money >= (States::Instance->Towers[towerNumber]->getLvl() * 5)) && (States::Instance->Towers[towerNumber]->getLvl() != 0)) {
+		//увеличить урон башни
+		if ((States::Instance->Money >= (States::Instance->Towers[towerNumber]->getLvl() * 5)) && (States::Instance->Towers[towerNumber]->getLvl() != 0) && (States::Instance->Towers[towerNumber]->getLvl() < 10)) {
+			//Если хватает урон,башня построена и уровень меньше 10, то улучшаем
 			States::Instance->Money -= States::Instance->Towers[towerNumber]->getLvl() * 5;
 			States::Instance->Towers[towerNumber]->upDmg();
 			System::Windows::Forms::MessageBox::Show("Башня улучшена успешно! Урон увеличен на 10.", "Улучшение", System::Windows::Forms::MessageBoxButtons::OK);
@@ -560,14 +588,21 @@ namespace TowerDefenceWForms {
 			label2->Text = "Уровень = " + States::Instance->Towers[towerNumber]->getLvl() + " Урон = " + States::Instance->Towers[towerNumber]->getDamage() + " Дальность = " + States::Instance->Towers[towerNumber]->getRange();
 		}
 		else if (States::Instance->Money < (States::Instance->Towers[towerNumber]->getLvl() * 5)) {
+			//Если не хватает средств
 			System::Windows::Forms::MessageBox::Show("У Вас недостаточно для этого средств!", "Недостаточно средств!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
-		else {
+		else if ((States::Instance->Towers[towerNumber]->getLvl() < 10)) {
+			//Если уровень уже 10
 			System::Windows::Forms::MessageBox::Show("Эта башня уже улучшена на максимум!", "Ошибка!", System::Windows::Forms::MessageBoxButtons::OK);
+		}
+		else {
+			//Если ещё не построена
+			System::Windows::Forms::MessageBox::Show("Эта башня ещё не построена!", "Ошибка!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 	}
 	private: System::Void upRange_Click(System::Object^ sender, System::EventArgs^ e) {
-		if ((States::Instance->Money >= (States::Instance->Towers[towerNumber]->getLvl() * 5)) && (States::Instance->Towers[towerNumber]->getLvl() != 0)) {
+		//Увеличение дальности башни
+		if ((States::Instance->Money >= (States::Instance->Towers[towerNumber]->getLvl() * 5)) && (States::Instance->Towers[towerNumber]->getLvl() != 0) && (States::Instance->Towers[towerNumber]->getLvl() < 10)) {
 			States::Instance->Money -= States::Instance->Towers[towerNumber]->getLvl() * 5;
 			States::Instance->Towers[towerNumber]->upRange();
 			System::Windows::Forms::MessageBox::Show("Башня улучшена успешно! Дальность увеличена на 1.", "Улучшение", System::Windows::Forms::MessageBoxButtons::OK);
@@ -578,11 +613,15 @@ namespace TowerDefenceWForms {
 		else if (States::Instance->Money < (States::Instance->Towers[towerNumber]->getLvl() * 5)) {
 			System::Windows::Forms::MessageBox::Show("У Вас недостаточно для этого средств!", "Недостаточно средств!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
-		else {
+		else if ((States::Instance->Towers[towerNumber]->getLvl() < 10)) {
 			System::Windows::Forms::MessageBox::Show("Эта башня уже улучшена на максимум!", "Ошибка!", System::Windows::Forms::MessageBoxButtons::OK);
+		}
+		else {
+			System::Windows::Forms::MessageBox::Show("Эта башня ещё не построена!", "Ошибка!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 	}
 	private: System::Void exit2_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Назад - возврат к начальному виду формы
 		label1->Text = "Выберите башню(серые кнопки на карте)";
 		label2->Visible = false;
 		upDmg->Visible = false;
@@ -595,6 +634,7 @@ namespace TowerDefenceWForms {
 		Exit->Visible = true;
 	}
 	private: System::Void Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Выход из формы
 		this->Close();
 	}
 

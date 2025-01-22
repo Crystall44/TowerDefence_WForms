@@ -85,36 +85,42 @@ namespace TowerDefenceWForms {
 
 #pragma endregion
 	private: System::Void Waves_Load(System::Object^ sender, System::EventArgs^ e) {
+		//Загрузка формы
 		DrawMap();
+		//распределение ресурсов для загрузки
 		Threading::Tasks::Task::Run(gcnew Action(this, &Waves::StartWaveProcessing));
-
 	}
 	private: void StartWaveProcessing() {
+		//Начало волны,её загрузка
 		mainHp->Text = "Здоровье главной башни = " + States::Instance->MainTower->getHp();
-		States::Instance->Wave += 1;
-		if (States::Instance->Wave % 5 == 0)
+		States::Instance->Wave += 1;//Увеличение номера волны
+		if (States::Instance->Wave % 5 == 0) //Проверка на волну босса
 		   States::Instance->Booster++;
-		 // Распределяем деньги врагам
+		 // Рандомайзер врагов
 		int mon = States::Instance->EnemysMoney / 20;
 		while (States::Instance->EnemysMoney > 0) {
 			buyEnemy(States::Instance->Wave, enemys);
 		}
 		mon++;
+		//Распределение денег для будущих волн
 		for (int i = 0; i <= mon; i++) {
 			States::Instance->EnemysMoney += 20;
 		}
 		// Запускаем волну врагов
 		Wave();
-		if (States::Instance->MainTower->isAlive()) {
+		if (States::Instance->MainTower->isAlive()) {//Если главная башня не разрушена
 			System::Windows::Forms::MessageBox::Show("Волна " + States::Instance->Wave + " пройдена!", "Победа!", System::Windows::Forms::MessageBoxButtons::OK);
 		}
 		else {
+			//Если разрушена
 			System::Windows::Forms::MessageBox::Show("Главная башня разрушена! Вы проиграли.", "Поражение...", System::Windows::Forms::MessageBoxButtons::OK);
+			//Приложение открывается сначала,перезапуск
 			Application::Restart();
 		}
     }
 	public:
 		void DrawMap() {
+			//Рисование карты
 			// Получаем карту из States
 			auto map = States::Instance->Map;
 			int towerNumber = 0;
@@ -127,6 +133,7 @@ namespace TowerDefenceWForms {
 					mapVisual[i, j] = gcnew System::Windows::Forms::PictureBox();
 					mapVisual[i, j]->Width = 50;  // Ширина клетки
 					mapVisual[i, j]->Height = 50; // Высота клетки
+					//Смещение клетки
 					mapVisual[i, j]->Top = i * 50;
 					mapVisual[i, j]->Left = j * 50;
 					mapVisual[i, j]->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
@@ -168,6 +175,7 @@ namespace TowerDefenceWForms {
 		}
 
 		void placeEnemy(int i, int j, Enemy^ enemy) {
+			//Размещение врагов
 			System::Windows::Forms::PictureBox^ enemyVisual = gcnew System::Windows::Forms::PictureBox();
 
 			//Размеры врага
@@ -185,6 +193,7 @@ namespace TowerDefenceWForms {
 			// Добавляем врага на форму
 			this->Controls->Add(enemyVisual);
 
+			//Перенести на передний план
 			enemyVisual->BringToFront();
 
 			// Сохраняем ссылку на PictureBox в списке для дальнейшего удаления
@@ -192,6 +201,7 @@ namespace TowerDefenceWForms {
 		}
 
 		void clearEnemys() {
+			//Очистить всех врагов
 			for (int i = enemyVisuals->Count - 1; i >= 0; i--) {
 				this->Controls->Remove(enemyVisuals[i]); // Удаляем врага с формы
 				enemyVisuals->RemoveAt(i);  // Удаляем из списка
@@ -200,6 +210,7 @@ namespace TowerDefenceWForms {
 		}
 
 		void updateEnemys() {
+			//Обновить врагов на карте
 			clearEnemys();
 
 			for (int i = 0; i < enemys->Count; i++) {
@@ -209,7 +220,8 @@ namespace TowerDefenceWForms {
 		}
 
 		void buyEnemy(int wave, List<Enemy^>^ enemys) {
-			if (wave % 5 == 0 && enemysCount == 0) {
+			//Рандомайзер врагов
+			if (wave % 5 == 0 && enemysCount == 0) { //Если волна босса - 100% появляется босс, при чем 1
 				BossEnemy^ boss = gcnew BossEnemy();
 				if (States::Instance->EnemysMoney >= boss->getCost()) {
 					States::Instance->EnemysMoney = States::Instance->EnemysMoney - boss->getCost();
@@ -221,13 +233,13 @@ namespace TowerDefenceWForms {
 					enemys[enemysCount - 1]->setPlace(-1 * enemysCount);
 				}
 			}
-
+			//Рандомайзер врага
 			Enemy^ newEnemy = gcnew Enemy();
 			int r = rand() % 5;
 			r++;
 			FastEnemy^ fastEnemy = gcnew FastEnemy();
 			switch (r) {
-			case 1:
+			case 1://Зомби
 				newEnemy->setName("Zombe");
 				newEnemy->setCost(4);
 				newEnemy->setHp(100);
@@ -236,7 +248,7 @@ namespace TowerDefenceWForms {
 				newEnemy->setMoveStrategy(gcnew NormalMove());
 				newEnemy->setColor(System::Drawing::Color::FromArgb(30, 89, 69));
 				break;
-			case 2:
+			case 2://Скелет
 				newEnemy->setName("Skeleton");
 				newEnemy->setCost(2);
 				newEnemy->setHp(30);
@@ -245,7 +257,7 @@ namespace TowerDefenceWForms {
 				newEnemy->setMoveStrategy(gcnew NormalMove());
 				newEnemy->setColor(System::Drawing::Color::FromArgb(165, 165, 165));
 				break;
-			case 3:
+			case 3://Злой зомби
 				newEnemy->setName("Angry Zombe");
 				newEnemy->setCost(6);
 				newEnemy->setHp(75);
@@ -254,7 +266,7 @@ namespace TowerDefenceWForms {
 				newEnemy->setMoveStrategy(gcnew AdaptiveMove());
 				newEnemy->setColor(System::Drawing::Color::FromArgb(72, 6, 7));
 				break;
-			case 4:
+			case 4://Быстрый враг
 				newEnemy->setName(fastEnemy->getName());
 				newEnemy->setCost(fastEnemy->getCost());
 				newEnemy->setHp(fastEnemy->getHp());
@@ -263,7 +275,7 @@ namespace TowerDefenceWForms {
 				newEnemy->setMoveStrategy(gcnew FastMove());
 				newEnemy->setColor(System::Drawing::Color::FromArgb(244, 169, 0));
 				break;
-			case 5:
+			case 5://Муха
 				newEnemy->setName("Fly");
 				newEnemy->setCost(1);
 				newEnemy->setHp(5);
@@ -274,6 +286,7 @@ namespace TowerDefenceWForms {
 				break;
 			}
 			if (States::Instance->EnemysMoney >= newEnemy->getCost()) {
+				//Если деньги врагов > стоимости, то он спавнится
 				States::Instance->EnemysMoney = States::Instance->EnemysMoney - newEnemy->getCost();
 				newEnemy->setXY(1, 0);
 				newEnemy->setPlace(-1 * enemys->Count);
@@ -283,17 +296,18 @@ namespace TowerDefenceWForms {
 			}
 		}
 		void Wave() {
-			int k = 0; bool f = true; int i = 0; int count = enemysCount;
+			//Волна
+			int k = 0; bool f = true; int i = 0; 
 
 			do {
-				for (int j = 0; j < 12; j++) {
+				for (int j = 0; j < 12; j++) { //Башни стараются выстрелить по врагам
 					if (States::Instance->Towers[j]->getLvl() >= 1) {
-						if (States::Instance->Towers[j]->isBoosted()) {
+						if (States::Instance->Towers[j]->isBoosted()) { //Если башня усиленна - пытается выстрелить дважды(или если башня скорострельности)
 							for (int p = 0; p < 2; p++) {
 								for (i = 0; i < enemysCount; i++) {
-									if (enemys[i]->isAlive()) {
+									if (enemys[i]->isAlive()) { //Если враг жив - по нему выстрел
 										if (States::Instance->Towers[j]->isNear(enemys[i]->getPlace(), j) && (States::Instance->Towers[j]->getLvl() != 0) && (enemys[i]->getPlace() >= 1)) {
-											enemys[i]->takeDmg(States::Instance->Towers[j]->getDamage());
+											enemys[i]->takeDmg(States::Instance->Towers[j]->getDamage()); //если враг жив и рядом он получает урон
 											break;
 										}
 									}
@@ -311,24 +325,30 @@ namespace TowerDefenceWForms {
 						}
 					}
 				}
+				//Главная башня пытается нанести врагу урон
 				for (i = 0; i < enemysCount; i++) {
 					if (enemys[i]->isAlive() && enemys[i] != nullptr) {
 						if (States::Instance->MainTower->isNear(enemys[i]->getPlace()) && (enemys[i]->getPlace() >= 0)) {
+							//Если он жив и рядом - выстрел по 1 врагу
 							enemys[i]->takeDmg(States::Instance->MainTower->getDamage());
 							break;
 						}
 					}
 				}
+				//Дальше враги пытаются пройти вперёд
 				for (i = 0; i < enemysCount; i++) {
 					if (enemys[i]->isAlive()) {
+						//Если жив и не у главной башни - делает движение
 						if (enemys[i]->getPlace() != 52) {
 							enemys[i]->Move(enemys[i]);
 						}
 						else if (enemys[i]->getPlace() == 52) {
+							//Если у башни - наносит ей урон
 							States::Instance->MainTower->takeDmg(enemys[i]->getDmg());
 						}
 					}
 					else {
+						//Если враг умер - пользователь получает средства, а также враг удаляется
 						States::Instance->Money += enemys[i]->getCost() * 2;
 						enemys->RemoveAt(i);
 						enemysCount--;
@@ -336,11 +356,11 @@ namespace TowerDefenceWForms {
 					}
 				}
 
-				this->Invoke(gcnew Action(this, &Waves::updateEnemys));
-				mainHp->Text = "Здоровье главной башни = " + States::Instance->MainTower->getHp();
-				Threading::Thread::Sleep(800);
-				if (enemysCount == 0) f = 0;
-				if (States::Instance->MainTower->isAlive() != true) f = 0;
+				this->Invoke(gcnew Action(this, &Waves::updateEnemys)); //Обновить врагов на карте
+				mainHp->Text = "Здоровье главной башни = " + States::Instance->MainTower->getHp(); //Обновить показатель здоровья главной башни
+				Threading::Thread::Sleep(800); //Пауза 800 мс
+				if (enemysCount == 0) f = 0; //Если врагов больше нет - конец волны(победа)
+				if (States::Instance->MainTower->isAlive() != true) f = 0; //Если главная башня разрушена - конец волны(Поражение)
 			} while (f);
 			enemysCount = 0;
 			this->Close();

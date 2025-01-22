@@ -1,19 +1,15 @@
 #pragma once
 #include <string>
-public interface class MoveStrategy {
+public interface class MoveStrategy {//Стратегия движения врагов
 public:
 	virtual void Move(int% place, int hp, int maxHp) = 0;
-	virtual System::String^ getSpeedDescription() = 0;
 };
 
-//Обычная скорость движение
+//Обычная скорость движения
 public ref  class NormalMove : public MoveStrategy {
 public:
 	void Move(int% place, int hp, int maxHp) override {
 		place++;//Движение на 1 клетку
-	}
-	System::String^ getSpeedDescription() override {
-		return "Обычная скорость. 1 клетка за 1 кадр.";
 	}
 };
 
@@ -22,9 +18,6 @@ public ref  class FastMove : public MoveStrategy {
 public:
 	void Move(int% place, int hp, int maxHp) override {
 		place += 2;//Движение на 2 клетки
-	}
-	System::String^ getSpeedDescription() override {
-		return "Быстрая скорость. 2 клетки за 1 кадр.";
 	}
 };
 
@@ -39,18 +32,12 @@ public:
 			place += 2;
 		}
 	}
-	System::String^ getSpeedDescription() override {
-		return "Переменчивая скорость. 1 клетка за 1 кадр, но 2 клетки за кадр если здоровье меньше половины.";
-	}
 };
 
-//Стоящее на месте поведение врага(будет использованно в будущем)
+//Стоящее на месте поведение врага(не используется)
 public ref  class StuckMove : public MoveStrategy {
 public:
 	void Move(int% place, int hp, int maxHp) override {} //На месте(например,оглушение)
-	System::String^ getSpeedDescription() override {
-		return "Стоит на месте.";
-	}
 };
 
 //Медленная скорость - для босса
@@ -67,10 +54,7 @@ public:
 		}
 		else {
 			f = 0;
-			place++;
+			place++;//1 клетка раз в 2 хода
 		}
-	}
-	System::String^ getSpeedDescription() override {
-		return "Медленная скорость. 1 клетка за 2 кадра.";
 	}
 };

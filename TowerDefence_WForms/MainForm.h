@@ -176,19 +176,23 @@ namespace TowerDefenceWForms {
 	private: System::Void MainForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Выход из приложения
 		Application::Exit();
 	}
 	private: System::Void enemys_Click(System::Object^ sender, System::EventArgs^ e) {
+		//О врагах(другая форма)
 		AboutEnemys^ about = gcnew AboutEnemys;
 		this->Hide();
 		about->ShowDialog();
 		this->Show();
 	}
 	private: System::Void info_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Информация(другая форма)
 		Info^ infor = gcnew Info;
 		infor->Show();
 	}
 	private: System::Void play_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Играть(другая форма)
 		Game^ game = gcnew Game();
 		this->Hide();
 		game->ShowDialog();

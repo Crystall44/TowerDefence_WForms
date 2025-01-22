@@ -150,28 +150,31 @@ namespace TowerDefenceWForms {
 #pragma endregion
 	private: System::Void Game_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
-	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void exit_Click(System::Object^ sender, System::EventArgs^ e) { //Кнопка выхода(обнуление прогресса при выходе)
 		System::Windows::Forms::DialogResult result = System::Windows::Forms::MessageBox::Show("Вы уверены, что хотите выйти?\nДанные будут удалены!", "Выход из игры", System::Windows::Forms::MessageBoxButtons::YesNo);
 		if (result == System::Windows::Forms::DialogResult::Yes) {
-			States::Instance->Reset();
+			States::Instance->Reset();//Обнулить значения
 			this->Close();
 		}
 		else {
 		}
 	}
-	private: System::Void about_Click(System::Object ^ sender, System::EventArgs ^ e) {
+	private: System::Void about_Click(System::Object ^ sender, System::EventArgs ^ e) {//О врагах
+		//Другая форма
 		AboutEnemys^ about = gcnew AboutEnemys;
 		this->Hide();
 		about->ShowDialog();
 		this->Show();
 	}
 	private: System::Void shop_Click(System::Object ^ sender, System::EventArgs ^ e) {
+		//Магазин(другая форма)
 		Shop^ shop = gcnew Shop;
 		this->Hide();
 		shop->ShowDialog();
 		this->Show();
 	}
 	private: System::Void start_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Начать волну(другая форма)
 		Waves^ waves = gcnew Waves;
 		this->Hide();
 		waves->ShowDialog();

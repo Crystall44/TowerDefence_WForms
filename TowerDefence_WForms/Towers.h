@@ -1,10 +1,10 @@
 #pragma once
-
+//Класс глваной башня
 public ref class Tower {
 private:
-	int hp;
-	int lvl;
-	int dmg;
+	int hp; //здоровье
+	int lvl; //Уровень
+	int dmg; //Урон
 public:
 	Tower() {
 		hp = 3000;
@@ -12,7 +12,7 @@ public:
 		dmg = 20;
 	}
 
-	void takeDmg(int damage) {
+	void takeDmg(int damage) { //Получение урона
 		hp -= damage;
 	}
 	bool isAlive() {//Проверка,что башня ещё не разрушена
@@ -41,10 +41,10 @@ public:
 			return false;
 		}
 	}
-	void repair() {//Починка(вызывается в Shop)
+	void repair() {//Починка
 		hp += 500;
 	}
-	void upgrade() {
+	void upgrade() { //Улучшение
 		lvl++;
 		dmg += 20;
 	}
@@ -53,12 +53,12 @@ public:
 //Класс защищающей башни
 public ref class TowerDef {
 protected:
-	int dmg;
-	int lvl;
-	int range;
-	bool boostTower;
+	int dmg; //Урон
+	int lvl; //Уровень
+	int range; //Дальность
+	bool boostTower; //Усилена ли
 public:
-	TowerDef(int dmg1,int lvl1, int range1, bool boostTower1) {
+	TowerDef(int dmg1,int lvl1, int range1, bool boostTower1) {//Конструктор
 		dmg = dmg1;
 		lvl = lvl1;
 		range = range1;
@@ -71,38 +71,38 @@ public:
 	int getDamage() {
 		return dmg;
 	}
-	int getLvl() { //Возврат значения через указатель
+	int getLvl() { 
 		return lvl;
 	}
-	int getRange() { //Возврат значения через указатель
+	int getRange() { 
 		return range;
 	}
 	bool isNear(int enemyPlace, int towerPlace) {//Проверка рядом ли с башней враг
-		switch (towerPlace) {
+		switch (towerPlace) { //Разные проверки для разных башен
+		case 0:
+			return(((enemyPlace >= (3 - range)) && (enemyPlace <= (3 + range))) || ((enemyPlace >= (17 - range)) && (enemyPlace <= (17 + range))));
 		case 1:
-			return((enemyPlace >= (5 - range)) && (enemyPlace <= (5 + range)) || ((enemyPlace >= (19 - range)) && (enemyPlace <= (19 + range))));
+			return(((enemyPlace >= (6 - range)) && (enemyPlace <= (6 + range))) || ((enemyPlace >= (14 - range)) && (enemyPlace <= (14 + range))));
 		case 2:
-			return((enemyPlace >= (8 - range)) && (enemyPlace <= (8 + range)) || ((enemyPlace >= (16 - range)) && (enemyPlace <= (16 + range))));
+			return(((enemyPlace >= (9 - range))) && (enemyPlace <= (11 + range)));
 		case 3:
-			return((enemyPlace >= (11 - range)) && (enemyPlace <= (13 + range)));
+			return((enemyPlace >= (19 - range)) && (enemyPlace <= (21 + range)));
 		case 4:
-			return((enemyPlace >= (21 - range)) && (enemyPlace <= (23 + range)));
+			return(((enemyPlace >= (14 - range)) && (enemyPlace <= (14 + range))) || ((enemyPlace >= (26 - range)) && (enemyPlace <= (26 + range))));
 		case 5:
-			return((enemyPlace >= (16 - range)) && (enemyPlace <= (16 + range)) || ((enemyPlace >= (28 - range)) && (enemyPlace <= (28 + range))));
+			return(((enemyPlace >= (26 - range)) && (enemyPlace <= (26 + range))) || ((enemyPlace >= (34 - range)) && (enemyPlace <= (34 + range))));
 		case 6:
-			return((enemyPlace >= (28 - range)) && (enemyPlace <= (28 + range)) || ((enemyPlace >= (36 - range)) && (enemyPlace <= (37 + range))));
+			return((enemyPlace >= (29 - range)) && (enemyPlace <= (31 + range)));
 		case 7:
-			return((enemyPlace >= (31 - range)) && (enemyPlace <= (33 + range)));
+			return(((enemyPlace >= (21 - range + 1)) && (enemyPlace <= (21 + range - 1))) || (((enemyPlace >= (41 - range + 1)) && (enemyPlace <= (41 + range - 1)))));
 		case 8:
-			return((enemyPlace >= (23 - range + 1)) && (enemyPlace <= (23 + range - 1)) || ((enemyPlace >= (43 - range + 1)) && (enemyPlace <= (43 + range - 1))));
+			return(((enemyPlace >= (23 - range + 1)) && (enemyPlace <= (23 + range - 1))) || (((enemyPlace >= (35 - range + 1)) && (enemyPlace <= (35 + range - 1)))) || (((enemyPlace >= (39 - range + 1)) && (enemyPlace <= (40 + range - 1)))));
 		case 9:
-			return((enemyPlace >= (25 - range + 1)) && (enemyPlace <= (25 + range - 1)) || ((enemyPlace >= (37 - range + 1)) && (enemyPlace <= (37 + range - 1))) || ((enemyPlace >= (41 - range + 1)) && (enemyPlace <= (41 + range - 1))));
+			return(((enemyPlace >= (33 - range + 1)) && (enemyPlace <= (33 + range - 1))) || (((enemyPlace >= (37 - range + 1)) && (enemyPlace <= (37 + range - 1)))));
 		case 10:
-			return((enemyPlace >= (35 - range + 1)) && (enemyPlace <= (35 + range - 1)) || ((enemyPlace >= (39 - range + 1)) && (enemyPlace <= (39 + range - 1))));
+			return((enemyPlace >= (41 - range)) && (enemyPlace <= (43 + range)));
 		case 11:
-			return((enemyPlace >= (43 - range)) && (enemyPlace <= (45 + range)));
-		case 12:
-			return((enemyPlace >= (40 - range)) && (enemyPlace <= (40 + range)) || ((enemyPlace >= (48 - range)) && (enemyPlace <= (48 + range))));
+			return((enemyPlace >= (38 - range)) && (enemyPlace <= (38 + range)) || ((enemyPlace >= (46 - range)) && (enemyPlace <= (46 + range))));
 		}
 	}
 	void upDmg() {//Повышение урона
@@ -131,7 +131,7 @@ public:
 	void boosting() {
 		boostTower = true;
 	}
-	void Boost() {
+	void Boost() { //Усилить башню
 		dmg -= 10;
 		boostTower = true;
 	};

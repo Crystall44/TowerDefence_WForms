@@ -3,20 +3,20 @@
 #include "MoveStrategy.h"
 #include <iostream>
 #include <vector>
-//Структура врага
+//Класс врага
 public ref class Enemy {
 protected:
-	System::String^ name;
-	int cost;
-	short int hp;
-	short int maxHp;
-	short int dmg;
+	System::String^ name;//Имя
+	int cost;//Стоимость(редкость)
+	short int hp;//Здоровье(текущее)
+	short int maxHp;//Здоровье(Максимальное)
+	short int dmg;//Урон
 	System::Drawing::Color enemyColor; //Цвет врага
-	char pct;
-	int place;
-	int X;
-	int Y;
-	MoveStrategy^ moveStrategy;
+	char pct;//Символ
+	int place;//Позиция(числовая)
+	int X;//Позиция по X
+	int Y;//Позиция по Y
+	MoveStrategy^ moveStrategy;//Стратегия движения
 public:
 	// Конструктор инициализирует врага
 	Enemy() {
@@ -65,7 +65,7 @@ public:
 		moveStrategy->Move(place, hp, maxHp);
 		if (place >= 0) {
 			if (place - oldPlace > 0) {
-				if (place - oldPlace > 1) {
+				if (place - oldPlace > 1) {//Если враг за ход делает 2 шага по карте
 					oldPlace++;
 					if (oldPlace == 9 || oldPlace == 10 || oldPlace == 19 || oldPlace == 20 || oldPlace == 29 || oldPlace == 30 || oldPlace == 35 || oldPlace  == 36 || oldPlace == 41 || oldPlace == 42) {
 						X++;
@@ -94,7 +94,7 @@ public:
 		return dmg;
 	}
 
-	void takeDmg(short int damage) {
+	void takeDmg(short int damage) {//Враг получает урон
 		hp -= damage;
 	}
 
@@ -105,7 +105,7 @@ public:
 		return place;
 	}
 
-	void setXY(int i, int j) {
+	void setXY(int i, int j) {//Установить позицию
 		X = i;
 		Y = j;
 	}
@@ -125,39 +125,14 @@ public:
 	System::Drawing::Color getColor() {
 		return enemyColor;
 	}
-
-	virtual System::String^ getSpeedDescription() {
-		if (moveStrategy) {
-			return moveStrategy->getSpeedDescription();
-		}
-		return nullptr;
-	}
-
-	virtual std::string getDescription() {
-		if (pct == 'Z') {
-			return "Зомби - обычный враг, который имеет большое количество здоровья. \nНе представляет особой угрозы, но может быть щитом для других врагов, что делает его довольно опасным.\n Имеет малый урон и обычную скорость.\n";
-		}
-		else if (pct == 'S') {
-			return "Скелет - обычный враг, который имеет мало здоровья, появляется часто.\nВ одиночку не представляет никакой угрозы.\nНо могут создавать неприятности, ведь может появится сразу много скелетов за счёт их малой редкости.\n";
-		}
-		else if (pct == 'A') {
-			return "Злой зомби - училенный зомби, с меньшим количеством здоровья, но с большим уроном.\nПредставляет сам по себе опасность, ведь как только его здоровье падает до половины - начинает двигаться в 2 раза быстрее.\n";
-		}
-		else {
-			return "Информации об этом враге нет.";
-		}
-	}
 };
 
-//Структура босса - дочерный класс Enemy
+//Класс Босса
 public ref class BossEnemy :public Enemy {
 public:
 	BossEnemy() : Enemy("Boss", 50, 500, 50, 'B', gcnew SlowMove()) {}
 	~BossEnemy() {};
 
-	std::string getDescription() override {
-		return "Босс - выходит на каждую 5 волну, и только 1 босс на карте. Очень медленный, но очень опасный враг.\nОгромное количество здоровья и урона, до него игра кажеться совсем лёгкой,не так ли?\n";
-	}
 };
 
 //Класс быстрого врага
@@ -166,8 +141,4 @@ public:
 	FastEnemy() : Enemy("FastEnemy", 12, 50, 20, 'F', gcnew FastMove()) {}
 
 	~FastEnemy() {}
-
-	std::string getDescription() override {
-		return "Быстрый враг - соответствует названию, быстрый и опасный враг.\nДвигается очень быстро, наносит много урона, но у него совсем мало здоровья.\n";
-	}
 };
